@@ -1,0 +1,35 @@
+seed = 4585
+worldlist = {"world1","world2","world3"}
+world_id = ""
+
+
+function join(world, worldid)
+    sendPacket(3, "action|joinrequest\nname|" .. world)
+    sleep(5000)
+    sendPacket(3, "action|joinrequest\nname|" .. world .."|".. worldid)
+    sleep(5000)
+end
+
+function ht()
+    for _, tile in pairs(getTiles) do
+        if tile.fg == seed then
+            if getTile(tile.x,tile.y).ready and getTile(tile.x,tile.y + 1) ~= 0 and getTile(tile.x,tile.y) ~= 0 then
+                findPath(tile.x,tile.y)
+                sleep(200)
+                while getTile(tile.x,tile.y).ready and getTile(tile.x,tile.y) ~= 0 do
+                    punch(0,0)
+                    sleep(200)
+                end
+            end
+        end
+    end
+end
+function nextworld()
+    for i = 1, #worldlist do
+        join(worldlist[i],world_id)
+        sleep(3000)
+        ht()
+    end
+end
+
+nextworld()
