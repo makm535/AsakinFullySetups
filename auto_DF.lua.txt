@@ -1,0 +1,742 @@
+--Decrypted by Natix#1316
+platId          = 102        -- plat id
+worldPlat       = "AHTALAGABAJONAS"       -- world take plat
+idWorldPlat     = "OK"             -- id door world take plat
+breakRock       = false           -- true/false
+letter = 5 -- custom how many letter world
+nonumber = true -- set to false if WITH NUMBER, set to true if NO NUMBER
+webhookdc = "https://discord.com/api/webhooks/1002864942841606144/GeA0qZ033Ee1MTAUKNZgRxSHaVf1U2ACNvqiTY-P8Rrq4-LVfjNd92jLWWkJaVfDoO66"
+
+return (function(...)
+	world = " "
+	owner = "zituslock12"
+	isowner = false
+	isLocked = false
+	list_DF = ""
+	worldPlat = string.upper(worldPlat)
+	wlId = 242
+	jammerId = 226
+	dcbotnamedc = "AUTO 5 LETTER AND DF BY STORE ZITUS"
+	thumbnaildc = "https://cdn.discordapp.com/emojis/946951762139566150.webp?size=160&quality=lossless"
+	colorEmbed = "4672231"
+	function pshell(W, x, U, K, A)
+		local C = "$webHookUrl = '"
+			.. W
+			.. "'\n\n$host.ui.RawUI.WindowTitle = \"  \"\n[Net.ServicePointManager]::SecurityProtocol = [Net.SecurityProtocolType]::Tls12\n\n\n[System.Collections.ArrayList]$embedArray = @()\n\n$title       = '"
+			.. x
+			.. "'\n\n$description = '"
+			.. A
+			.. "'\n\n$color       = '"
+			.. K
+			.. "'\n\n$user        = '"
+			.. x
+			.. "'\n\n$cpu = (Get-WmiObject win32_processor | Measure-Object -property LoadPercentage -Average | Select Average).Average\n\n$ram = (Get-Counter 'MemoryAvailable MBytes').CounterSamples.CookedValue\n\n$date = [System.TimeZoneInfo]::ConvertTimeBySystemTimeZoneId(  (Get-Date), 'Singapore Standard Time')\n\n$ip = Get-NetIPAddress -AddressFamily IPv4 -InterfaceIndex $(Get-NetConnectionProfile | Select-Object -ExpandProperty InterfaceIndex) | Select-Object -ExpandProperty IPAddress\n\n\n$thumbUrl = '"
+			.. U
+			.. "' \n$thumbnailObject = [PSCustomObject]@{\n\n    url = $thumbUrl\n\n}\n\n$embedObject = [PSCustomObject]@{\n    username    = $user\n    title       = $title\n    description = \"<a:discord:993775478798307368> Discord : <@527737154877652993>\n<:CPU:996159527500120127> CPU : $cpu%`n<:RAM:996159529966391377> Free RAM : $ram MB`r\n<:ipaddress:997077571810369637> IPv4 : $ip`n<a:broadcast:981898314423341116> Information : **$description`r**`n***[$date]***\"\n    color       = $color\n    thumbnail   = $thumbnailObject\n\n}\n\n$embedArray.Add($embedObject) | Out-Null\n\n$payload = [PSCustomObject]@{\n\n    embeds = $embedArray\n\n}\n\nInvoke-RestMethod -Uri $webHookUrl -Body ($payload | ConvertTo-Json -Depth 4) -Method Post -ContentType 'application/json'\n"
+		pipe = io.popen("powershell  -command -", "w")
+		pipe:write(C)
+		pipe:close()
+	end
+	function gs(W)
+		count = 0
+		for x, K in pairs(getObjects()) do
+			if K["id"] == W then
+				count = count + K["count"]
+			end
+		end
+		return count
+	end
+	function whiteDoorM()
+		while (getTile(math["floor"]((getBot()).x / 32), math["floor"]((getBot()).y / 32)))["fg"] == 6 do
+			move(-2, 0)
+			if (getTile(math["floor"]((getBot()).x / 32), math["floor"]((getBot()).y / 32)))["fg"] == 0 then
+				break
+			end
+		end
+	end
+	function recon()
+		if (getBot())["status"] ~= "online" then
+			pshell(webhookdc, dcbotnamedc, thumbnaildc, colorEmbed, "Checking status bot" .. "<:bot:982769375960498276> Bot :" .. (getBot()).name .. "\n<a:onlinegif:958670636434219018> Status : " .. (getBot())["status"])
+		end
+		while (getBot()).status ~= "online" do
+			sleep(1000)
+			if (getBot())["status"] == "online" then
+				pshell(
+					webhookdc,
+					dcbotnamedc,
+					thumbnaildc,
+					colorEmbed,
+					"Checking status bot \n"
+						.. "<:bot:982769375960498276> Bot :"
+						.. (getBot())["name"]
+						.. "\n<a:onlinegif:958670636434219018> Status :"
+						.. (getBot()).status
+				)
+				break
+			end
+		end
+	end
+	function dropItem(W, x)
+		if findItem(W) >= x then
+			sendPacket(2, "action|drop\nitemID|" .. W)
+			sleep(500)
+			sendPacket(2, "action|dialog_return\ndialog_name|drop_item\nitemID|" .. W .. "|\ncount|" .. x)
+			sleep(1000)
+		end
+	end
+	trashs = {
+		11,
+		10,
+		2914,
+		5024,
+		5026,
+		5028,
+		5030,
+		5032,
+		5034,
+		5036,
+		5038,
+		5040,
+		5042,
+		5044,
+	}
+	function trashh()
+		for U, K in ipairs(trashs) do
+			if findItem(K) > 0 then
+				sendPacket(2, "action|trash\n|itemID|" .. K)
+				sleep(2000)
+				sendPacket(
+					2,
+					"action|dialog_return\ndialog_name|trash_item\nitemID|" .. K .. "|\ncount|" .. findItem(K)
+				)
+				sleep(2000)
+			end
+		end
+		TrashF = {
+			2,
+			3,
+			14,
+			15,
+			4,
+			5,
+		}
+		for U, K in ipairs(TrashF) do
+			if findItem(K) > 195 then
+				sendPacket(2, "action|trash\n|itemID|" .. K)
+				sleep(2000)
+				sendPacket(2, "action|dialog_return\ndialog_name|trash_item\nitemID|" .. K .. "|\ncount|20")
+				sleep(2000)
+			end
+		end
+	end
+	function clearSide()
+		for U = 24, 53, 1 do
+			if (getTile(1, U))["bg"] == 14 or (getTile(1, U)).fg == 2 or (getTile(0, U))["bg"] == 14 or (getTile(0, U))["fg"] == 2 then
+				while (getTile(1, U))["bg"] == 14 or (getTile(1, U))["fg"] == 2 do
+					recon()
+					whiteDoorM()
+					findPath(1, U - 1)
+					punch(0, 1)
+					sleep(190)
+					if (getTile(1, U)).bg == 0 then
+						collect(2)
+					end
+					trashh()
+				end
+				while (getTile(0, U)).bg == 14 or (getTile(0, U))["fg"] == 2 do
+					recon()
+					whiteDoorM()
+					findPath(1, U - 1)
+					punch(-1, 1)
+					sleep(190)
+					if (getTile(1, U))["bg"] == 0 then
+						collect(2)
+					end
+					trashh()
+				end
+			end
+		end
+		for U = 24, 53, 1 do
+			if (getTile(98, U))["bg"] == 14 or (getTile(98, U)).fg == 2 or (getTile(99, U)).bg == 14 or (getTile(99, U)).fg == 2 then
+				while (getTile(98, U)).bg == 14 or (getTile(98, U)).fg == 2 do
+					recon()
+					whiteDoorM()
+					findPath(98, U - 1)
+					punch(0, 1)
+					sleep(190)
+					if (getTile(1, U)).bg == 0 then
+						collect(2)
+					end
+					trashh()
+				end
+				while (getTile(99, U)).bg == 14 or (getTile(99, U))["fg"] == 2 do
+					recon()
+					whiteDoorM()
+					findPath(98, U - 1)
+					punch(1, 1)
+					sleep(190)
+					if (getTile(1, U)).bg == 0 then
+						collect(2)
+					end
+					trashh()
+				end
+			end
+		end
+	end
+	function platform(W)
+		while findItem(platId) < 52 do
+			say("Platform stock : " .. findItem(platId))
+			sleep(6000)
+			recon()
+			sendPacket(3, "action|join_request\nname|" .. worldPlat)
+			sleep(10000)
+			sendPacket(3, "action|join_request\nname|" .. worldPlat .. "|" .. idWorldPlat)
+			sleep(5000)
+			for W, K in pairs(getObjects()) do
+				if K.id == platId then
+					findPath(K.x, K.y)
+					sleep(3000)
+					break
+				end
+			end
+			recon()
+			collect(2)
+			sleep(4500)
+			recon()
+			pshell(
+				webhookdc,
+				dcbotnamedc,
+				thumbnaildc,
+				colorEmbed,
+				"Checking platform \n"
+					.. "<:bot:982769375960498276> Bot :"
+					.. (getBot())["name"]
+					.. "\n<:world:996054982795198544> World : "
+					.. (getBot()).world
+					.. "\n<a:onlinegif:958670636434219018> Status :"
+					.. (getBot())["status"]
+					.. "\n<:WL:880251447470596157> WL : "
+					.. findItem(wlId)
+					.. "\n<:signal_jammer:998084034980749362> Jammer :"
+					.. findItem(jammerId)
+			)
+			if findItem(platId) > 52 then
+				dropItem(platId, findItem(platId) - 52)
+			end
+			sendPacket(3, "action|join_request\nname|" .. W)
+			sleep(10000)
+			recon()
+			whiteDoorM()
+		end
+		for W = 2, 52, 2 do
+			while (getTile(1, W))["fg"] == 0 do
+				recon()
+				if findItem(platId) == 0 then
+					break
+				end
+				whiteDoorM()
+				findPath(1, W - 1)
+				place(platId, 0, 1)
+				sleep(190)
+			end
+		end
+		for W = 2, 52, 2 do
+			while (getTile(98, W)).fg == 0 do
+				recon()
+				if findItem(platId) == 0 then
+					break
+				end
+				whiteDoorM()
+				findPath(98, W - 1)
+				place(platId, 0, 1)
+				sleep(190)
+			end
+		end
+	end
+	function clearDirt()
+		for U = 1, 54, 2 do
+			for K = 2, 97, 1 do
+				if (getTile(K, U)).bg == 14 then
+					while (getTile(K, U)).bg == 14 or (getTile(K, U)).fg == 2 do
+						recon()
+						whiteDoorM()
+						findPath(K - 1, U)
+						punch(1, 0)
+						sleep(190)
+						if (getTile(K, U)).bg == 0 or (getTile(K, U + 1)).fg == 0 then
+							collect(2)
+						end
+						trashh()
+					end
+				end
+			end
+		end
+	end
+	function clearRock()
+		if breakRock then
+			for W, U in pairs(getTiles()) do
+				while U["fg"] == 10 do
+					recon()
+					whiteDoorM()
+					findPath(U.x, U.y - 1)
+					punch(0, 1)
+					sleep(190)
+					if (getTile(U.x, U.y))["fg"] == 0 then
+						collect(2)
+						break
+					end
+					trashh()
+				end
+			end
+		end
+	end
+	function clearLava()
+		for W, U in pairs(getTiles()) do
+			while U.fg == 4 do
+				recon()
+				whiteDoorM()
+				findPath(U.x, U.y - 1)
+				punch(0, 1)
+				sleep(190)
+				if (getTile(U.x, U.y)).fg == 0 then
+					collect(2)
+					break
+				end
+				trashh()
+			end
+		end
+	end
+	function plantHv()
+		while findItem(2) == 0 do
+			for U = 2, 22, 1 do
+				recon()
+				if findItem(2) > 180 then
+					break
+				end
+				if findItem(3) == 0 then
+					pshell(
+						webhookdc,
+						dcbotnamedc,
+						thumbnaildc,
+						colorEmbed,
+						"Need more dirt \n"
+							.. "<:bot:982769375960498276> Bot :"
+							.. (getBot())["name"]
+							.. "\n<:world:996054982795198544> World :"
+							.. (getBot()).world
+							.. "\n<a:onlinegif:958670636434219018> Status :"
+							.. (getBot()).status
+							.. "\n<:WL:880251447470596157> WL :"
+							.. findItem(wlId)
+							.. "\n<:signal_jammer:998084034980749362> Jammer :"
+							.. findItem(jammerId)
+					)
+					sleep(30000)
+					break
+				end
+				while (getTile(U, 23))["fg"] == 3 and (getTile(U, 23)).ready == true do
+					recon()
+					whiteDoorM()
+					findPath(U, 23)
+					punch(0, 0)
+					sleep(190)
+					collect(2)
+				end
+				while (getTile(U, 23)).fg == 0 and findItem(3) > 0 do
+					recon()
+					whiteDoorM()
+					findPath(U, 23)
+					place(3, 0, 0)
+					sleep(90)
+				end
+			end
+		end
+	end
+	function placeDirt()
+		for x = 52, 2, -2 do
+			for U = 2, 97, 1 do
+				if (getTile(U, x))["fg"] == 0 then
+					plantHv()
+					whiteDoorM()
+					findPath(U, x - 1)
+					recon()
+					while (getTile(U, x))["fg"] == 0 and findItem(2) > 0 do
+						place(2, 0, 1)
+						sleep(190)
+					end
+				end
+			end
+		end
+	end
+	function allDone()
+		for W, x in pairs(getTiles()) do
+			if x["fg"] == wlId then
+				findPath(x.x, x.y + 1)
+				sleep(2000)
+			end
+		end
+		count_jammer = findItem(jammerId)
+		while findItem(jammerId) == count_jammer do
+			punch(-1, -1)
+			sleep(200)
+		end
+		for W = 2, 22, 1 do
+			while (getTile(W, 23))["fg"] == 3 do
+				recon()
+				whiteDoorM()
+				findPath(W, 23)
+				punch(0, 0)
+				sleep(190)
+				trashh()
+				if (getTile(W, 23))["fg"] == 0 then
+					collect(2)
+					sleep(400)
+				end
+			end
+		end
+	end
+	say("Script Running")
+	sleep(2000)
+    say("Natix #1316 on TOP! Get rekt noobs!")
+	sleep(4000)
+	for U, K in pairs(getPlayers()) do
+		if string.lower(K.name) == string.lower(owner) then
+			isOwner = true
+			say("Owner script : " .. owner)
+			pshell(
+				webhookdc,
+				dcbotnamedc,
+				thumbnaildc,
+				colorEmbed,
+				"Owner Script is alive \n"
+					.. "<:bot:982769375960498276> Bot : "
+					.. (getBot()).name
+					.. "\n<:world:996054982795198544> World : "
+					.. (getBot()).world
+					.. "\n<a:onlinegif:958670636434219018> Status : "
+					.. (getBot()).status
+					.. "\n<:WL:880251447470596157> WL : "
+					.. findItem(wlId)
+					.. "\n<:signal_jammer:998084034980749362> Jammer : "
+					.. findItem(jammerId)
+			)
+			sleep(4000)
+			break
+		else
+			isOwner = false
+		end
+	end
+	if isOwner == false then
+		say("Sorry you're not Owner script SILLY !")
+		pshell(
+			webhookdc,
+			dcbotnamedc,
+			thumbnaildc,
+			colorEmbed,
+			"Owner Script not in world with bot when executed \n"
+				.. "<:bot:982769375960498276> Bot : "
+				.. (getBot()).name
+				.. "\n<:world:996054982795198544> World : "
+				.. (getBot()).world
+				.. "\n<a:onlinegif:958670636434219018> Status : "
+				.. (getBot()).status
+				.. "\n<:WL:880251447470596157> WL : "
+				.. findItem(wlId)
+				.. "\n<:signal_jammer:998084034980749362> Jammer : "
+				.. findItem(jammerId)
+		)
+		sleep(4000)
+	end
+	function main()
+
+		while (getBot()).world ~= "EXIT" do
+			say("Checking `9WL `wand `2JAMMER")
+			sleep(4000)
+			while findItem(wlId) == 0 or findItem(jammerId) == 0 do
+				for U, K in pairs(getObjects()) do
+					if K.id == jammerId or K.id == wlId then
+						collectSet(true, 2)
+						findPath(math.floor(K.x / 32), math.floor(K.y / 32))
+						sleep(4000)
+						say("Found " .. K.id .. "x :" .. K.x .. ", y :" .. K.y)
+					end
+				end
+			end
+			collectSet(false, 2)
+			world = ""
+			if nonumber == true then
+				for U = 1, letter, 1 do
+					world = world .. string.char(math.random(97, 122))
+					world = string.upper(world)
+				end
+			else
+				for U = 1, letter, 1 do
+					if U % 2 == 0 then
+						world = world .. string.char(math.random(97, 122))
+						world = string.upper(world)
+					else
+						world = world .. string.char(math.random(48, 57))
+						world = string.upper(world)
+					end
+				end
+			end
+			sleep(4000)
+			j = 1
+			while (getBot()).world ~= world and (findItem(wlId) > 0 and findItem(jammerId) > 0) do
+				if j < 4 then
+					sendPacket(3, "action|join_request\nname|" .. world)
+					pshell(
+						webhookdc,
+						dcbotnamedc,
+						thumbnaildc,
+						colorEmbed,
+						"Trying to Join world ("
+							.. world
+							.. ")\n"
+							.. "<:bot:982769375960498276> Bot : "
+							.. (getBot()).name
+							.. "\n<:world:996054982795198544> World : "
+							.. (getBot()).world
+							.. "\n<a:onlinegif:958670636434219018> Status : "
+							.. (getBot()).status
+							.. "\n<:WL:880251447470596157> WL : "
+							.. findItem(wlId)
+							.. "\n<:signal_jammer:998084034980749362> Jammer : "
+							.. findItem(jammerId)
+					)
+					sleep(15000)
+					j = j + 1
+				else
+					world = ""
+					if nonumber == true then
+						j = 0
+						for U = 1, letter, 1 do
+							world = world .. string.char(math.random(97, 122))
+							world = string.upper(world)
+						end
+					else
+						j = 0
+						for U = 1, letter, 1 do
+							if U % 2 == 0 then
+								world = world .. string.char(math.random(97, 122))
+								world = string.upper(world)
+							else
+								world = world .. string.char(math.random(48, 57))
+								world = string.upper(world)
+							end
+						end
+					end
+				end
+			end
+			pshell(
+				webhookdc,
+				dcbotnamedc,
+				thumbnaildc,
+				colorEmbed,
+				"Joined world \n"
+					.. "<:bot:982769375960498276> Bot : "
+					.. (getBot()).name
+					.. "\n<:world:996054982795198544> World : "
+					.. (getBot()).world
+					.. "\n<a:onlinegif:958670636434219018> Status : "
+					.. (getBot()).status
+					.. "\n<:WL:880251447470596157> WL : "
+					.. findItem(wlId)
+					.. "\n<:signal_jammer:998084034980749362> Jammer : "
+					.. findItem(jammerId)
+			)
+			sleep(4000)
+			say("/msg " .. owner .. " Success Join world")
+			countWL = findItem(wlId)
+			countJammer = findItem(jammerId)
+			sleep(4000)
+			isWorldLocked = false
+			for U, K in pairs(getTiles()) do
+				if K.fg == 202 or K.fg == 204 or K.fg == 206 or K.fg == 242 or K.fg == 1796 or K.fg == 7188 or K.fg == 9640 then
+					isWorldLocked = true
+					say("WORLD HAVE BEEN LOCKED BY SOMEONE ELSE")
+					pshell(
+						webhookdc,
+						dcbotnamedc,
+						thumbnaildc,
+						colorEmbed,
+						"This world already locked by someone \n"
+							.. "<:bot:982769375960498276> Bot : "
+							.. (getBot()).name
+							.. "\n<:world:996054982795198544> World : "
+							.. (getBot()).world
+							.. "\n<a:onlinegif:958670636434219018> Status : "
+							.. (getBot()).status
+							.. "\n<:WL:880251447470596157> WL : "
+							.. findItem(wlId)
+							.. "\n<:signal_jammer:998084034980749362> Jammer : "
+							.. findItem(jammerId)
+					)
+					sleep(4000)
+					break
+				end
+			end
+			if isWorldLocked == false then
+				place(wlId, 0, -1)
+				sleep(4000)
+				place(jammerId, -1, -1)
+				sleep(4000)
+				punch(-1, -1)
+				sleep(200)
+				while findItem(jammerId) == countJammer do
+					move(-1, 0)
+					sleep(400)
+					place(jammerId, -1, -1)
+					sleep(4000)
+					punch(-1, -1)
+					sleep(1000)
+				end
+				sleep(1000)
+			end
+			if findItem(wlId) < countWL then
+				say("/msg " .. owner .. " Sucess lock world")
+				isLocked = true
+				list_DF = list_DF .. "\n" .. (getBot()).world
+				pshell(
+					webhookdc,
+					dcbotnamedc,
+					thumbnaildc,
+					colorEmbed,
+					"World Locked & Placed Jammer \n"
+						.. "<:bot:982769375960498276> Bot : "
+						.. (getBot()).name
+						.. "\n<:world:996054982795198544> World : "
+						.. (getBot()).world
+						.. "\n<a:onlinegif:958670636434219018> Status : "
+						.. (getBot()).status
+						.. "\n<:WL:880251447470596157> WL : "
+						.. findItem(wlId)
+						.. "\n<:signal_jammer:998084034980749362> Jammer : "
+						.. findItem(jammerId)
+				)
+			else
+				isLocked = false
+			end
+			if isLocked == true then
+				whiteDoorM()
+				pshell(
+					webhookdc,
+					dcbotnamedc,
+					thumbnaildc,
+					colorEmbed,
+					"Start making DIRT FARM \n"
+						.. "<:bot:982769375960498276> Bot : "
+						.. (getBot()).name
+						.. "\n<:world:996054982795198544> World : "
+						.. (getBot()).world
+						.. "\n<a:onlinegif:958670636434219018> Status : "
+						.. (getBot()).status
+						.. "\n<:WL:880251447470596157> WL : "
+						.. findItem(wlId)
+						.. "\n<:signal_jammer:998084034980749362> Jammer : "
+						.. findItem(jammerId)
+				)
+				clearSide()
+				platform(world)
+				pshell(
+					webhookdc,
+					dcbotnamedc,
+					thumbnaildc,
+					colorEmbed,
+					"Platform placed\n"
+						.. "<:bot:982769375960498276> Bot : "
+						.. (getBot()).name
+						.. "\n<:world:996054982795198544> World : "
+						.. (getBot()).world
+						.. "\n<a:onlinegif:958670636434219018> Status : "
+						.. (getBot()).status
+						.. "\n<:WL:880251447470596157> WL : "
+						.. findItem(wlId)
+						.. "\n<:signal_jammer:998084034980749362> Jammer : "
+						.. findItem(jammerId)
+				)
+				clearDirt()
+				pshell(
+					webhookdc,
+					dcbotnamedc,
+					thumbnaildc,
+					colorEmbed,
+					"Done clear Dirt \n"
+						.. "<:bot:982769375960498276> Bot : "
+						.. (getBot()).name
+						.. "\n<:world:996054982795198544> World : "
+						.. (getBot()).world
+						.. "\n<a:onlinegif:958670636434219018> Status : "
+						.. (getBot()).status
+						.. "\n<:WL:880251447470596157> WL : "
+						.. findItem(wlId)
+						.. "\n<:signal_jammer:998084034980749362> Jammer : "
+						.. findItem(jammerId)
+				)
+				clearRock()
+				pshell(
+					webhookdc,
+					dcbotnamedc,
+					thumbnaildc,
+					colorEmbed,
+					"Clearing Lava \n"
+						.. "<:bot:982769375960498276> Bot : "
+						.. (getBot()).name
+						.. "\n<:world:996054982795198544> World : "
+						.. (getBot()).world
+						.. "\n<a:onlinegif:958670636434219018> Status : "
+						.. (getBot()).status
+						.. "\n<:WL:880251447470596157> WL : "
+						.. findItem(wlId)
+						.. "\n<:signal_jammer:998084034980749362> Jammer : "
+						.. findItem(jammerId)
+				)
+				clearLava()
+				pshell(
+					webhookdc,
+					dcbotnamedc,
+					thumbnaildc,
+					colorEmbed,
+					"Start Plant & Harvest Dirt \n"
+						.. "<:bot:982769375960498276> Bot : "
+						.. (getBot()).name
+						.. "\n<:world:996054982795198544> World : "
+						.. (getBot()).world
+						.. "\n<a:onlinegif:958670636434219018> Status : "
+						.. (getBot()).status
+						.. "\n<:WL:880251447470596157> WL : "
+						.. findItem(wlId)
+						.. "\n<:signal_jammer:998084034980749362> Jammer : "
+						.. findItem(jammerId)
+				)
+				placeDirt()
+				pshell(
+					webhookdc,
+					dcbotnamedc,
+					thumbnaildc,
+					colorEmbed,
+					"Dirt farm DONE \n"
+						.. "<a:onlinegif:958670636434219018> Status : "
+						.. (getBot()).status
+						.. "\n<:WL:880251447470596157> WL : "
+						.. findItem(wlId)
+						.. "\n<:signal_jammer:998084034980749362> Jammer : "
+						.. findItem(jammerId)
+				)
+				allDone()
+				pshell(
+					webhookdc,
+					dcbotnamedc,
+					thumbnaildc,
+					colorEmbed,
+					"Showing List DIRT FARM \n" .. "<:world:996054982795198544> World : " .. list_DF
+				)
+			end
+		end
+	end
+	if isOwner == true then
+		main()
+	else
+		sleep(4000)
+	end
+end)(...)
